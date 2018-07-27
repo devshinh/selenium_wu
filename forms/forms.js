@@ -33,42 +33,33 @@ driver.get('http://business.westernunion.com/Contact-Us').then(function(){
 	
 	driver.findElement(webdriver.By.css("#TopicOfInterest > option:nth-child(1)")).click();
 	driver.findElement(webdriver.By.css("#Country > option:nth-child(1)")).click().then(function(countrySelector){		
-		
-		driver.findElement(webdriver.By.css("#State')).then(function() {
 			
-			driver.wait(webdriver.until.elementLocated(webdriver.By.id('State')), 6000).then(el => {
-			
-			 
-				driver.findElement(webdriver.By.css("#State > option:nth-child(1)")).click().then(function() {				
-					driver.findElement(webdriver.By.css('form input[type=submit]')).submit().then(function() {
-								
-						//driver = null;
-						driver.wait(webdriver.until.elementLocated(webdriver.By.css('form span[id*=error]')), 2000).then(function() {
-							console.log("Errors Found on the page");
-							driver.quit();					
-						}).catch((e) => {
-							if(e.name === 'NoSuchElementError') {
-								console.log('No Errors found on page');
-							}
+		driver.wait(webdriver.until.elementLocated(webdriver.By.id('State')), 6000).then(el => {
+			driver.findElement(webdriver.By.css("#State > option:nth-child(1)")).click().then(function() {				
+				driver.findElement(webdriver.By.css('form input[type=submit]')).submit().then(function() {
 							
-						});		
-						console.log('No Errors found on page');
-						driver.quit();	
-					});	
-				}).catch((e) => {
-					if(e.name === 'NoSuchElementError') {
-						console.log('Selector State not Found after locating');
-					}
-				});
-			
+					//driver = null;
+					driver.wait(webdriver.until.elementLocated(webdriver.By.css('form span[id*=error]')), 2000).then(function() {
+						console.log("Errors Found on the page");
+						driver.quit();					
+					}).catch((e) => {
+						if(e.name === 'NoSuchElementError') {
+							console.log('No Errors found on page');
+						}
+						driver.quit();
+						
+					});		
+					console.log('No Errors found on page');
+						
+				});	
+			}).catch((e) => {
+				if(e.name === 'NoSuchElementError') {
+					console.log('Selector State not Found after locating');
+				}
 			});
-		}, function(err) {
-        if (err.state && err.state === 'no such element') {
-            console.log('Selector State not Found');
-        } else {
-            webdriver.promise.rejected(err);
-        }
+		
 		});
+		
 	});	
 		
 });
