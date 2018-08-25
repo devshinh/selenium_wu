@@ -31,6 +31,7 @@ driver.get('http://business.westernunion.com/Contact-Us').then(function(){
 		driver.findElement(webdriver.By.id("Comments")).sendKeys("Some testing text on its way");
 	}).then(function() {
 		driver.findElement(webdriver.By.id("TelephoneNumber")).sendKeys("9999999999");	
+		// 9999999999
 	}).then(function() {
 		driver.findElement(webdriver.By.css("#TopicOfInterest > option:nth-child(1)")).click();	
 	}).then(function() {
@@ -53,66 +54,75 @@ driver.get('http://business.westernunion.com/Contact-Us').then(function(){
 		});
 		
 	}).then(function() {
-		//driver.findElement(webdriver.By.css("#Country > option:nth-child(1)")).click().then(function(countrySelector){		
+		// country with no state 
 		driver.findElement(webdriver.By.css("#Country > option[value=US]")).click().then(function(countrySelector){
-			console.log("country clicked and .. ");
+			console.log("Country clicked and .. ");
 			
-			var stateEl = driver.wait(webdriver.until.elementLocated(webdriver.By.css("#State > option:nth-child(1)")), 5000);
-
-			driver.wait(webdriver.until.elementIsVisible(stateEl), 5000).click().then(function() {
-				console.log("State visible and .. ");
-				driver.findElement(webdriver.By.css('form input[type=submit]')).submit().then(function() {
-					console.log(" FORM submit done with state available ");
-					driver.wait(webdriver.until.elementLocated(webdriver.By.css('form span[id*=error]')), 2000).then(function(spanEl) {
-						console.log("1. Errors Found on the page");
-						
-						driver.quit();					
-					}).catch((e) => {
-						if(e.name === 'NoSuchElementError') {
-							console.log('1. No Errors found on page');								
-						}
-						driver.quit();	
-					});		
-				}).catch((e) => {
-					if(e.name === 'NoSuchElementError') {
-						console.log('No State option found');						
-					}
-					driver.quit();		
-				});
-				
-			}).catch((e) => {
-				console.log(" Just inside catch of State for ->" + e.name);
-				if(e.name === 'NoSuchElementError') {
-					console.log('No State element found');					
-				}
-				if(e.name === 'TimeoutError') {
-					console.log('Timed out');
-				}
-				
-				driver.findElement(webdriver.By.css('form input[type=submit]')).submit().then(function() {
-					driver.wait(webdriver.until.elementLocated(webdriver.By.css('form span[id*=error]')), 2000).then(function() {
-						console.log("2. Errors Found on the page");
-						driver.quit();					
-					}).catch((e) => {
-						console.log(' 3. inside catch' + e.name);
-						if(e.name === 'NoSuchElementError') {
-							console.log('2. No Errors found on page');									
-						} else {
-							console.log('Just quit from catch of catch');							
-						}
-						driver.quit();						
-					});		
-					console.log('FORM submit in catch ');
-					//driver.quit();	
-				}).catch((e) => {
-					if(e.name === 'NoSuchElementError') {
-						console.log('No button for Submit found');						
-					}
-					driver.quit();	
-				});	
+			driver.wait(webdriver.until.elementLocated(webdriver.By.css("#State > option:nth-child(1)")), 5000).then(function(){
+				driver.wait(webdriver.until.elementIsVisible(stateEl), 5000).click().then(function() {
+					console.log("State visible ");				
 					
+				}).catch((e) => {
+					console.log(" Just inside catch of State for ->" + e.name);
+					if(e.name === 'NoSuchElementError') {
+						console.log('No State element found');					
+					}
+					if(e.name === 'TimeoutError') {
+						console.log('Timed out');
+					}
+						
+				});				
+			}).catch((e) => {
+				if(e.name === 'NoSuchElementError') {
+					console.log('No State option found');						
+				}
+				console.log(" \\ Quit-State // ");								
 			});
+			
+		}).catch((e) => {
+			if(e.name === 'NoSuchElementError') {
+				console.log('No Country found');						
+			}
+			console.log(" \\ QuitCountry // ");			
 		});
+	}).then(function(){
+		driver.findElement(webdriver.By.css('form input[type=submit]')).submit().then(function() {
+			console.log(" FORM submit available ");
+			driver.wait(webdriver.until.elementLocated(webdriver.By.css('form span[id*=error]')), 4000).then(function(spanEl) {
+				console.log(" \\ In Error loop // ");
+				
+				spanEl.getAttribute('id').then(function(spanName){					
+					console.log(" Error is for -> " +  spanName);
+				}).catch((e) => {
+					if(e.name === 'NoSuchElementError') {
+						console.log('1. No Errors found on page');								
+					}
+					console.log(" \\ Quit1 // " + e.name);
+					//driver.quit();	
+				});	
+				//console.log("1. Errors Found on the page "  );
+				
+				//driver.quit();					
+			}).catch((e) => {
+				if(e.name === 'NoSuchElementError') {
+					console.log('1. No Errors found on page');								
+				}
+				console.log(" \\ Quit2 // ");
+				//driver.quit();	
+			});		
+				
+				
+		}).catch((e) => {
+			if(e.name === 'NoSuchElementError') {
+				console.log('No Submit found');						
+			}
+			console.log(" \\ Quit3 // ");
+			driver.quit();		
+		});		
+	}).then(function() {
+		//console.log('ta ta');
 	});
+	
+	
 	
 });
