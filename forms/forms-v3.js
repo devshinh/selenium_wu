@@ -10,7 +10,7 @@ var capabilities = {
  'browserstack.user' : 'charmonylai1',
  'browserstack.key' : 'UFfuJqkwMxHsUDYzz8nM',
  'browserstack.debug' : 'true',
- 'build': 'version0.1',
+ 'build': 'version 0.3',
  'project': 'WUBS - Forms'
 }
 
@@ -26,9 +26,9 @@ driver.get('http://business.westernunion.com/Contact-Us').then(function(){
 			console.log("Form text values filled" );
 		});
 	}).then(function() {
-		driver.findElement(webdriver.By.id("Email")).sendKeys("abc@test.com");								
+		driver.findElement(webdriver.By.id("Email")).sendKeys("abc@wubs.com");								
 	}).then(function() {
-		driver.findElement(webdriver.By.id("Comments")).sendKeys("Some testing text on its way");
+		driver.findElement(webdriver.By.id("Comments")).sendKeys("This is a test comment *");
 	}).then(function() {
 		driver.findElement(webdriver.By.id("TelephoneNumber")).sendKeys("9999999999");	
 		// 9999999999
@@ -42,7 +42,7 @@ driver.get('http://business.westernunion.com/Contact-Us').then(function(){
 				console.log("checkbox clicked and .. ");	
 				//console.log(chkbox.getAttribute('id'));				
 				chkbox.findElement(chkbox).then(function(){
-					chkbox.click();					
+					chkbox.click();				
 					
 				});
 			});
@@ -54,42 +54,44 @@ driver.get('http://business.westernunion.com/Contact-Us').then(function(){
 		});
 		
 	}).then(function() {
-		// country with no state 
+		// country selector
 		driver.findElement(webdriver.By.css("#Country > option[value=US]")).click().then(function(countrySelector){
-			console.log("Country clicked and .. ");
-			
-			driver.wait(webdriver.until.elementLocated(webdriver.By.css("#State > option:nth-child(1)")), 5000).then(function(){
-				driver.wait(webdriver.until.elementIsVisible(stateEl), 5000).click().then(function() {
-					console.log("State visible ");				
-					
-				}).catch((e) => {
-					console.log(" Just inside catch of State for ->" + e.name);
-					if(e.name === 'NoSuchElementError') {
-						console.log('No State element found');					
-					}
-					if(e.name === 'TimeoutError') {
-						console.log('Timed out');
-					}
-						
-				});				
-			}).catch((e) => {
-				if(e.name === 'NoSuchElementError') {
-					console.log('No State option found');						
-				}
-				console.log(" \\ Quit-State // ");								
-			});
-			
+			console.log("Country clicked and .. ");	
 		}).catch((e) => {
 			if(e.name === 'NoSuchElementError') {
 				console.log('No Country found');						
 			}
 			console.log(" \\ QuitCountry // ");			
 		});
+			
 	}).then(function(){
-		driver.findElement(webdriver.By.css('form input[type=submit]')).submit().then(function() {
+		driver.wait(webdriver.until.elementLocated(webdriver.By.css("#State > option:nth-child(1)")), 5000).then(function(){
+			var stateEl = webdriver.By.css("#State > option:nth-child(1)");
+			
+			driver.wait(webdriver.until.elementIsVisible(stateEl), 5000).click().then(function() {
+				console.log("State visible and clicked ");				
+				
+			}).catch((e) => {
+				console.log(" Just inside catch of State for ->" + e.name);
+				if(e.name === 'NoSuchElementError') {
+					console.log('No State element found');					
+				}
+				if(e.name === 'TimeoutError') {
+					console.log('Timed out');
+				}					
+			});				
+		}).catch((e) => {
+			if(e.name === 'NoSuchElementError') {
+				console.log('No State option found');						
+			}
+			console.log(" \\ Quit State // ");								
+		});
+		
+	}).then(function(){
+		driver.findElement(webdriver.By.css('form input[type=submit]')).click().then(function() {
 			console.log(" FORM submit available ");
 			driver.wait(webdriver.until.elementLocated(webdriver.By.css('form span[id*=error]')), 4000).then(function(spanEl) {
-				console.log(" \\ In Error loop // ");
+				console.log(" \\ Found Errors // ");
 				
 				spanEl.getAttribute('id').then(function(spanName){					
 					console.log(" Error is for -> " +  spanName);
@@ -107,7 +109,7 @@ driver.get('http://business.westernunion.com/Contact-Us').then(function(){
 				if(e.name === 'NoSuchElementError') {
 					console.log('1. No Errors found on page');								
 				}
-				console.log(" \\ Quit2 // ");
+				console.log(" Quit for no errors  " + e.name);
 				//driver.quit();	
 			});		
 				
@@ -116,12 +118,16 @@ driver.get('http://business.westernunion.com/Contact-Us').then(function(){
 			if(e.name === 'NoSuchElementError') {
 				console.log('No Submit found');						
 			}
-			console.log(" \\ Quit3 // ");
+			console.log(" Quit No Submit ");
 			driver.quit();		
 		});		
-	}).then(function() {
-		//console.log('ta ta');
+		
+		
 	});
+			
+			
+		
+	//});
 	
 	
 	
