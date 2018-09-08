@@ -60,7 +60,7 @@ driver.get('https://business.westernunion.com/').then(function(){
 	}).catch((e) => {
 		console.log(' Some issue @ 2 ' + e.name + ' is ' + e.message);									
 		if(e.name === 'NoSuchElementError') {
-			console.log('No button for Submit found');						
+			console.log('No image found on page');						
 		}
 		driver.quit();	
 	});
